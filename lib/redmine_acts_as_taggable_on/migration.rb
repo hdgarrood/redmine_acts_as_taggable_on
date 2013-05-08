@@ -30,14 +30,22 @@ class RedmineActsAsTaggableOn::Migration < ActsAsTaggableOnMigration
     end
   end
 
+  # A list of plugins which require redmine_acts_as_taggable_on.
+  #
+  # We reject the current one because we don't want to say
+  #
+  #   refusing to migrate redmine_foo down: tags and taggings tables are still
+  #   required by redmine_foo
+  #
+  # That would be silly.
   def requiring_plugins
-    Redmine::Plugin.all.select(&:requires_acts_as_taggable_on?)
+    Redmine::Plugin.all.
+      select(&:requires_acts_as_taggable_on?).
+      reject {|p| p == Redmine::Plugin::Migrator.current_plugin }
   end
 
-  # if only one plugin requires acts_as_taggable_on and we're trying to migrate
-  # down, then that's ok
   def ok_to_go_down?
-    requiring_plugins.count <= 1
+    requiring_plugins.empty?
   end
 
   def enforce_declarations!
