@@ -22,11 +22,25 @@ uninstalling:
 mechanism to declare that they require these tables, and providing intelligent
 migrations which only drop the tables when no other plugins are using them.
 
+`redmine_acts_as_taggable_on` also provides a limited defence against plugins
+which directly depend on `acts-as-taggable-on` by grepping through their
+Gemfiles for the string `acts-as-taggable-on`, and treating them the same way
+as plugins which use this gem, together with a gentle(-ish) suggestion to
+use this gem instead.
+
 ## Status
 
-**Not ready for production.**
+**Believed to be stable; not extensively tested in the wild.**
 
-This gem isn't quite there yet.
+## Limitations
+
+This plugin cannot currently protect against situations where a plugin directly
+using `acts-as-taggable-on` has put the generated migration into its
+db/migrate, and the Redmine admin tries to uninstall it.
+
+I'm in two minds about whether to fix this: one the one hand, it would require
+some nasty hackery, and it's no worse than the current situation. On the other, 
+losing one's data is not fun.
 
 ## Setup
 
