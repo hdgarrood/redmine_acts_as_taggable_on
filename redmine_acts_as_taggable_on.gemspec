@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.description   = %q{Allows multiple Redmine plugins to use tags safely}
   spec.summary       = %q{Allows multiple Redmine plugins to use the acts_as_taggable_on gem without stepping on each others' toes.}
   spec.homepage      = "https://github.com/hdgarrood/redmine_acts_as_taggable_on"
-  spec.license       = "MIT"
+  spec.license       = "GPLv2"
 
   spec.files         = `git ls-files`.split($/)
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
