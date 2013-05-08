@@ -18,9 +18,9 @@ uninstalling:
 * Leave the tables there, violating the user's expectation that the database
   should be back to how it was before the plugin was installed
 
-`redmine_acts_as_taggable_on` fixes this by giving Redmine plugins a mechanism
-to declare that they require these tables, and providing intelligent migrations
-which only drop the tables when no other plugins are using them.
+`redmine_acts_as_taggable_on` solves this issue by giving Redmine plugins a
+mechanism to declare that they require these tables, and providing intelligent
+migrations which only drop the tables when no other plugins are using them.
 
 ## Status
 
