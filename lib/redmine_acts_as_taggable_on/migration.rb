@@ -44,7 +44,7 @@ class RedmineActsAsTaggableOn::Migration < ActsAsTaggableOnMigration
     unless current_plugin_declaration_made?
       msg = "You have to declare that you need redmine_acts_as_taggable_on inside\n"
       msg << "init.rb. See https://github.com/hdgarrood/redmine_acts_as_taggable_on\n"
-      msg << "for more details."
+      msg << "for more details.\n\n"
       fail msg
     end
   end
