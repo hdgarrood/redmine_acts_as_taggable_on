@@ -29,7 +29,7 @@ module RedmineActsAsTaggableOn::RedminePluginPatch
       msg << "which means that it might accidentally delete some of your data\n"
       msg << "when you uninstall it. You should badger its maintainer to switch\n"
       msg << "to https://github.com/hdgarrood/redmine_acts_as_taggable_on.\n\n"
-      $stderr.puts msg
+      $stderr.write msg
     end
     @already_warned_about_acts_as_taggable_on = true
   end
