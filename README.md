@@ -1,13 +1,13 @@
 # redmine_acts_as_taggable_on
 
 `redmine_acts_as_taggable_on` is a gem which allows multiple Redmine plugins to
-use the tables provided by `acts_as_taggable_on` without stepping on each
+use the tables provided by `acts-as-taggable-on` without stepping on each
 others' toes.
 
 ## How it works
 
 The problem we ran into when we discovered that both `redmine_tags` and
-`redmine_knowledgebase` want to use the `acts_as_taggable_on` gem is that after
+`redmine_knowledgebase` want to use the `acts-as-taggable-on` gem is that after
 either is installed, the migration for the other fails, since the database
 tables already exist.
 
