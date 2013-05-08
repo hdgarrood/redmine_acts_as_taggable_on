@@ -1,3 +1,5 @@
+require 'generators/acts_as_taggable_on/migration/templates/active_record/migration'
+
 class RedmineActsAsTaggableOn::Migration < ActsAsTaggableOnMigration
   def up
     enforce_declarations!
