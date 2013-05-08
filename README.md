@@ -32,16 +32,19 @@ This gem isn't quite there yet.
 
 Add it to your plugin's Gemfile:
 
-    gem 'redmine_acts_as_taggable_on', '~> 0.1.0'
+    gem 'redmine_acts_as_taggable_on', '~> 0.1'
 
 Add the migration:
 
-    TODO
+    echo 'class AddTagsAndTaggings < RedmineActsAsTaggableOn::Migration; end' \
+        > db/migrate/001_add_tags_and_taggings.rb
 
 Declare that your plugin needs `redmine_acts_as_taggable_on` inside init.rb:
+
+    require 'redmine_acts_as_taggable_on/initialize'
 
     Redmine::Plugin.register :my_plugin do
       requires_acts_as_taggable_on
       ...
 
-That's it.
+That's it. Your plugin should now migrate up and down intelligently.
