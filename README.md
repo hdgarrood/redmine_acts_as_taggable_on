@@ -30,6 +30,7 @@ use this gem instead.
 
 ## Status
 
+* No tests (working on it!)
 * No known bugs
 * Tested with Redmine trunk (as of 2013-09-05) only
 * Not yet used by any Redmine plugins in the wild
