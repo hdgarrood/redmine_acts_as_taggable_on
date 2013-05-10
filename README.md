@@ -45,9 +45,8 @@ directory. If a user tries to migrate the plugin down by executing `rake
 redmine:plugins:migrate VERSION=0 NAME=redmine_foo_plugin`, the tables will
 still be dropped, regardless of whether other plugins are still using them.
 
-I'm in two minds about whether to fix this: one the one hand, it would require
-some nasty hackery, and it's no worse than the current situation. On the other, 
-losing one's data is not fun.
+I'm in two minds about whether to fix this: on the one hand, it would require
+some nasty monkey-patching. On the other hand, data loss is no fun at all.
 
 ## Setup
 
