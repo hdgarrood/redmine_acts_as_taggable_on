@@ -4,7 +4,7 @@
 use the tables provided by `acts-as-taggable-on` without stepping on each
 others' toes.
 
-## How it works
+## Why?
 
 The problem we ran into when we discovered that both `redmine_tags` and
 `redmine_knowledgebase` want to use the `acts-as-taggable-on` gem is that after
@@ -23,10 +23,10 @@ mechanism to declare that they require these tables, and providing intelligent
 migrations which only drop the tables when no other plugins are using them.
 
 `redmine_acts_as_taggable_on` also provides a limited defence against plugins
-which directly depend on `acts-as-taggable-on` by grepping through their
-Gemfiles for the string `acts-as-taggable-on`, and treating them the same way
-as plugins which use this gem, together with a gentle(-ish) suggestion to
-use this gem instead.
+which directly depend on `acts-as-taggable-on`. It does this by grepping
+through their Gemfiles for the string `acts-as-taggable-on` -- if found, it
+will treat the plugin as requiring the `acts-as-taggable-on` tables, and will
+print a gentle(-ish) suggestion to use this gem instead.
 
 ## Status
 
