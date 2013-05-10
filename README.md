@@ -30,16 +30,20 @@ print a gentle(-ish) suggestion to use this gem instead.
 
 ## Status
 
-* No tests (working on it!)
+**Not quite ready for prime-time.**
+
+* No automated tests, yet (I'm working on it!)
 * No known bugs
 * Tested with Redmine trunk (as of 2013-09-05) only
 * Not yet used by any Redmine plugins in the wild
 
 ## Limitations
 
-This plugin cannot currently protect against situations where a plugin directly
-using `acts-as-taggable-on` has put the generated migration into its
-db/migrate, and the Redmine admin tries to uninstall it.
+This gem cannot currently protect against situations where a plugin directly
+using `acts-as-taggable-on` has put the generated migration into its db/migrate
+directory. If a user tries to migrate the plugin down by executing `rake
+redmine:plugins:migrate VERSION=0 NAME=redmine_foo_plugin`, the tables will
+still be dropped, regardless of whether other plugins are still using them.
 
 I'm in two minds about whether to fix this: one the one hand, it would require
 some nasty hackery, and it's no worse than the current situation. On the other, 
