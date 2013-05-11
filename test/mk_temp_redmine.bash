@@ -11,6 +11,9 @@ mk_temp_redmine_function() {
   adapter: sqlite3
   database: db/redmine.sqlite3" > config/database.yml
 
+  # not sure why this is necessary...
+  echo "gem 'sqlite3'" > Gemfile.local
+
   bundle install
   rake generate_secret_token
   rake db:migrate
