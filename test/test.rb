@@ -1,56 +1,91 @@
 require 'tmpdir'
 require 'fileutils'
 
-REDMINE_SVN = "http://svn.redmine.org/redmine"
-DATABASE_YML = <<END
----
-# SQLite3 configuration example
+module RedmineActsAsTaggableOn::TestHelpers
+  def assert_system(*args)
+    expect(system(*args)).to eq(true)
+  end
+
+  def redmine_svn_root
+    "http://svn.redmine.org/redmine"
+  end
+
+  def database_yml_data
+    %q{---
 development:
   adapter: sqlite3
   database: db/redmine.sqlite3
-END
+}
+  end
 
-def assert_system(*args)
-  unless system(*args)
-    fail "system(#{args.join(', ')}) didn't exit 0 :("
+  def remove_all_plugins!
+    FileUtils.rm_rf 'plugins/*'
+  end
+
+  def recreate_db
+    assert_system "rake db:drop db:create db:migrate"
+  end
+
+  def make_temporary_redmine_installation
+    dir = Dir.mktmpdir('redmine_acts_as_taggable_on_test_')
+    Dir.chdir(dir)
+
+    assert_system "svn checkout #{redmine_svn_root}/trunk redmine >/dev/null"
+
+    Dir.chdir("redmine")
+    File.open("config/database.yml", "w") do |f|
+      f.write database_yml_data
+    end
+
+    assert_system "bundle install --without development test ldap openid rmagick >/dev/null"
+    assert_system "rake generate_secret_token >/dev/null"
+    assert_system "rake db:migrate >/dev/null"
+    dir
+  end
+
+  def migrate_plugin(name, direction = :up)
+    cmd = "rake redmine:plugins:migrate NAME=#{name}"
+    cmd << " VERSION=0" if direction == :down
+
+    assert_system cmd
+  end
+
+  def migrate_all_plugins(direction = :up)
+    cmd = "rake redmine:plugins:migrate"
+    cmd << " VERSION=0" if direction == :down
+
+    assert_system cmd
+  end
+
+  # a SQLite3::Database object
+  def database
+    @database ||= SQLite3::Database.open('db/redmine.sqlite3')
+  end
+
+  def table_exists?(name)
+    database.get_first_value(
+      "SELECT 1 FROM sqlite_master WHERE name=? AND type='table'",
+      name) == 1
   end
 end
 
-module TemporaryRedmineInstallation
-  module_function
-  def with_a_temporary_redmine_installation
-    fail 'need a block' unless block_given?
+describe RedmineActsAsTaggableOn do
+  include RedmineActsAsTaggableOn::TestHelpers
+  before(:all)  { @temporary_dir = make_temporary_redmine_installation }
+  after(:all)   { FileUtils.rm_rf @temporary_dir }
+  before(:each) { remove_all_plugins; recreate_db }
 
-    dir = Dir.mktmpdir('redmine_acts_as_taggable_on_test_')
-    Dir.chdir(dir) do
-      assert_system "svn checkout #{REDMINE_SVN}/trunk redmine --quiet"
-      puts "checked out redmine trunk"
-      Dir.chdir("redmine") do
-        File.open("config/database.yml", "w") do |f|
-          f.write DATABASE_YML
-        end
+  it "should migrate upwards" do
+    NewStylePlugin.create('redmine_foo')
+    migrate_plugin('redmine_foo')
+    expect(table_exists?('tags')).to eq(true)
+  end
 
-        # optionally quieten ActiveRecord migrations
-        File.open("config/environment.rb", "a") do |f|
-          # i'm a bit naughty ;)
-          f.puts "if ENV['MIGRATE_QUIETLY']"
-          f.puts "  class << ActiveRecord::Migration"
-          f.puts "    def verbose; false; end"
-          f.puts "    def verbose=(v); v; end"
-          f.puts "  end"
-          f.puts "end"
-        end
-
-        assert_system "bundle install --quiet"
-        assert_system "rake generate_secret_token"
-        assert_system "rake db:migrate >/dev/null"
-        puts "redmine installation all set up!"
-
-        yield
-      end
-    end
-  ensure
-    FileUtils.rm_rf(dir)
+  it "should migrate downwards" do
+    NewStylePlugin.create('redmine_foo')
+    migrate_plugin('redmine_foo')
+    migrate_plugin('redmine_foo', :down)
+    expect(table_exists?('tags')).to eq(false)
   end
 end
 
