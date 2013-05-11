@@ -18,6 +18,8 @@ teardown() {
 
 @test "migrates upwards" {
   mk_redmine_plugin "foo"
+  rake redmine:plugins:migrate
+
   db_table_exists 'tags'
   db_table_exists 'taggings'
 }
