@@ -5,14 +5,14 @@ load test_helpers
 # make tests transactional
 setup() {
   pushd "$temp_redmine_path/redmine"
-  db_query "SAVEPOINT pre_test"
+  cp db/redmine.sqlite3 db/redmine.sqlite3.bak
   cp db/schema.rb db/schema.rb.bak
 }
 
 teardown() {
   rm -rf plugins/*
   mv db/schema.rb.bak db/schema.rb
-  db_query "ROLLBACK TO SAVEPOINT pre_test"
+  mv db/redmine.sqlite3.bak db/redmine.sqlite3
   popd
 }
 
