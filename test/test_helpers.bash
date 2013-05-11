@@ -1,15 +1,7 @@
 #!/usr/bin/env bash
 
-# Creates a redmine plugin, assuming the current directory is the redmine root.
-mk_redmine_plugin() {
-  case $1 in
-    foo)  _mk_foo_plugin;;
-    *)    echo "mk_redmine_plugin: unknown plugin $2" >&2; return 1;;
-  esac
-}
-
 # A plugin using the gem properly.
-_mk_foo_plugin() {
+mk_foo_plugin() {
   mkdir plugins/redmine_foo
   cd plugins/redmine_foo
 

@@ -5,23 +5,22 @@ set -e
 # database.
 mk_temp_redmine_function() {
   svn checkout http://svn.redmine.org/redmine/trunk redmine
-  cd redmine
+  pushd redmine
 
   echo "development:
   adapter: sqlite3
   database: db/redmine.sqlite3" > config/database.yml
 
-  # not sure why this is necessary...
-  echo "gem 'sqlite3'" > Gemfile.local
-
   bundle install
-  rake generate_secret_token
-  rake db:migrate
+  rake generate_secret_token db:create db:migrate
+
+  popd
 }
 
 temp_redmine=`mktemp -d /tmp/redmine_acts_as_taggable_on.tmp.XXXXXXXX`
 pushd "$temp_redmine" >/dev/null
 mk_temp_redmine_function >/dev/null
+
 popd >/dev/null
 
 unset -f mk_temp_redmine_function

@@ -2,7 +2,6 @@
 
 load test_helpers
 
-# make tests transactional
 setup() {
   pushd "$temp_redmine_path/redmine"
   cp db/redmine.sqlite3 db/redmine.sqlite3.bak
@@ -17,7 +16,7 @@ teardown() {
 }
 
 @test "migrates upwards" {
-  mk_redmine_plugin "foo"
+  mk_foo_plugin
   rake redmine:plugins:migrate
 
   db_table_exists 'tags'

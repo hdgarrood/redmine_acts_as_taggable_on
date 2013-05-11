@@ -1,11 +1,6 @@
 #!/usr/bin/env bash
 set -e
 
-# stuff which we only do on Travis
-if [ -n "$TRAVIS" ]; then
-    sudo apt-get install -y sqlite3
-fi
-
 RAILS_ENV=development
 export RAILS_ENV
 
