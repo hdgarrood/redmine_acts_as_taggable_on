@@ -30,7 +30,8 @@ Redmine::Plugin.register :redmine_foo { requires_acts_as_taggable_on }" \
 }
 
 db_query() {
-  sqlite3 db/redmine.sqlite3 $1
+  # use -init to ensure ~/.sqliterc isn't read
+  sqlite3 -init "" db/redmine.sqlite3 "$1"
 }
 
 db_table_exists() {
