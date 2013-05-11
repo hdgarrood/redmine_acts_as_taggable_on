@@ -1,9 +1,12 @@
 #!/usr/bin/env bash
 set -e
 
-# makes a temporary Redmine installation in ./redmine, using SQLite as the
-# database.
-mk_temp_redmine_function() {
+# makes a new Redmine installation in a temporary directory, using SQLite as
+# the database.
+make_temp_redmine() {
+  temp_redmine=`mktemp -d /tmp/redmine_acts_as_taggable_on.tmp.XXXXXXXX`
+  pushd "$temp_redmine"
+
   svn checkout http://svn.redmine.org/redmine/trunk redmine
   pushd redmine
 
@@ -15,13 +18,8 @@ mk_temp_redmine_function() {
   rake generate_secret_token db:create db:migrate
 
   popd
+  popd
 }
 
-temp_redmine=`mktemp -d /tmp/redmine_acts_as_taggable_on.tmp.XXXXXXXX`
-pushd "$temp_redmine" >/dev/null
-mk_temp_redmine_function >/dev/null
-
-popd >/dev/null
-
-unset -f mk_temp_redmine_function
-echo $temp_redmine
+make_temp_redmine >/dev/null
+echo "$temp_redmine"
