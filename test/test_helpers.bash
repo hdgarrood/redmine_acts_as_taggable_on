@@ -17,14 +17,14 @@ _mk_foo_plugin() {
   :path => '$redmine_acts_as_taggable_on_path'" > Gemfile
 
   echo "require 'redmine_acts_as_taggable_on/initialize'
-Redmine::Plugin.register :redmine_foo { requires_acts_as_taggable_on }" \
+Redmine::Plugin.register(:redmine_foo) { requires_acts_as_taggable_on }" \
     > init.rb
 
   mkdir -p db/migrate
   echo "class AddTagsAndTaggings < RedmineActsAsTaggableOn::Migration; end" \
     > db/migrate/001_add_tags_and_taggings.rb
 
-  bundle
+  bundle >/dev/null
 
   cd ../..
 }
