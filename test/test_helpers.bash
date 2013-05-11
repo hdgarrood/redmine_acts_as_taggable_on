@@ -24,11 +24,17 @@ Redmine::Plugin.register :redmine_foo { requires_acts_as_taggable_on }" \
   echo "class AddTagsAndTaggings < RedmineActsAsTaggableOn::Migration; end" \
     > db/migrate/001_add_tags_and_taggings.rb
 
+  bundle
+
   cd ../..
 }
 
+db_query() {
+  sqlite3 db/redmine.sqlite3 $1
+}
+
 db_table_exists() {
-  sqlite3 db/redmine.sqlite3 "SELECT 'it exists'
+  db_query "SELECT 'it exists'
   FROM sqlite_master
   WHERE type='table' AND name='$1'" | grep 'it exists' >/dev/null
 }
