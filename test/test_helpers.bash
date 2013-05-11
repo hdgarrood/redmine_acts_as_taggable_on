@@ -14,7 +14,7 @@ _mk_foo_plugin() {
   cd plugins/redmine_foo
 
   echo "gem 'redmine_acts_as_taggable_on',
-  :path => $redmine_acts_as_taggable_on_path" > Gemfile
+  :path => '$redmine_acts_as_taggable_on_path'" > Gemfile
 
   echo "require 'redmine_acts_as_taggable_on/initialize'
 Redmine::Plugin.register :redmine_foo { requires_acts_as_taggable_on }" \
