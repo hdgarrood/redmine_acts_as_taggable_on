@@ -17,10 +17,9 @@ mk_temp_redmine_function() {
 }
 
 temp_redmine=`mktemp -d /tmp/redmine_acts_as_taggable_on.tmp.XXXXXXXX`
-cd "$temp_redmine"
-
+pushd "$temp_redmine"
 mk_temp_redmine_function >/dev/null
-unset -f mk_temp_redmine_function
+popd
 
+unset -f mk_temp_redmine_function
 echo $temp_redmine
-exit 0
