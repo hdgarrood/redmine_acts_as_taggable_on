@@ -6,7 +6,10 @@ pushd "$redmine_acts_as_taggable_on_path"
 
 export temp_redmine_path="`test/mk_temp_redmine.bash`"
 [ -f test/bats/bin/bats ] || git submodule update
-test/bats/bin/bats test/test.bats
+
+test_status=0
+test/bats/bin/bats test/test.bats || test_status=1
 rm -rf "$temp_redmine_path"
 
 popd
+exit $test_status
