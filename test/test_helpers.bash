@@ -28,7 +28,7 @@ Redmine::Plugin.register :redmine_foo { requires_acts_as_taggable_on }" \
 }
 
 db_table_exists() {
-  sqlite db/redmine.sqlite3 "SELECT 'it exists'
+  sqlite3 db/redmine.sqlite3 "SELECT 'it exists'
   FROM sqlite_master
   WHERE type='table' AND name='$1'" | grep 'it exists' >/dev/null
 }
