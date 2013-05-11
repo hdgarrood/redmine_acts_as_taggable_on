@@ -34,7 +34,7 @@ print a gentle(-ish) suggestion to use this gem instead.
 
 * No automated tests, yet (I'm working on it!)
 * No known bugs
-* Tested with Redmine trunk (as of 2013-09-05) only
+* Tested with Redmine trunk (as of 2013-05-09) only
 * Not yet used by any Redmine plugins in the wild
 
 ## Limitations
