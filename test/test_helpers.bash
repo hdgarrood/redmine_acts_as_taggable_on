@@ -15,7 +15,7 @@ mk_standard_plugin() {
 
 # Create a plugin which uses the redmine_acts_as_taggable_on gem properly.
 mk_proper_plugin() {
-  mk_standard_plugin "$1"
+  mk_standard_plugin "$1" >/dev/null
   local name="redmine_$1"
   pushd plugins/$name >/dev/null
 
@@ -35,6 +35,37 @@ Redmine::Plugin.register(:$name) { requires_acts_as_taggable_on }" \
   popd >/dev/null
 
   echo "Created a redmine plugin using redmine_acts_as_taggable_on: $name"
+}
+
+# Create a plugin which uses redmine_acts_as_taggable_on but without the
+# declaration in init.rb
+mk_plugin_missing_declaration() {
+  mk_proper_plugin "$1" >/dev/null
+  local name="redmine_$1"
+  pushd plugins/$name >/dev/null
+
+  echo "require 'redmine_acts_as_taggable_on/initialize'
+Redmine::Plugin.register(:$name) { name '$name' }" > init.rb
+
+  popd >/dev/null
+
+  echo "Created a redmine plugin using redmine_acts_as_taggable_on"
+  echo "  (but without the declaration): $name"
+}
+
+# Create a plugin which uses acts-as-taggable-on directly, and which expects
+# you to do rails g acts_as_taggable_on:migration yourself.
+mk_old_style_plugin() {
+  mk_standard_plugin "$1" >/dev/null
+  local name="redmine_$1"
+  pushd plugins/$name >/dev/null
+
+  echo "gem 'acts-as-taggable-on'" > Gemfile
+  bundle >/dev/null
+  popd >/dev/null
+
+  echo "Created a plugin using acts-as-taggable-on without the embedded"
+  echo "  migration: $name"
 }
 
 db_query() {

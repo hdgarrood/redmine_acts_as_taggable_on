@@ -5,6 +5,7 @@ class RedmineActsAsTaggableOn::Migration < ActsAsTaggableOnMigration
 
   def up
     enforce_declarations!
+    check_for_old_style_plugins
 
     if ok_to_go_up?
       super
@@ -26,6 +27,30 @@ class RedmineActsAsTaggableOn::Migration < ActsAsTaggableOnMigration
   end
 
   private
+  def enforce_declarations!
+    unless current_plugin_declaration_made?
+      msg = "You have to declare that you need redmine_acts_as_taggable_on inside\n"
+      msg << "init.rb. See https://github.com/hdgarrood/redmine_acts_as_taggable_on\n"
+      msg << "for more details.\n\n"
+      fail msg
+    end
+  end
+
+  def current_plugin_declaration_made?
+    current_plugin.requires_acts_as_taggable_on?
+  end
+
+  def current_plugin
+    Redmine::Plugin::Migrator.current_plugin
+  end
+
+  # Check if any plugins are using acts-as-taggable-on directly; the purpose of
+  # this is only to print a warning if so.
+  def check_for_old_style_plugins
+    Redmine::Plugin.all.each { |p| p.requires_acts_as_taggable_on? }
+    nil
+  end
+
   def ok_to_go_up?
     tables_already_exist = %w(tags taggings).any? do |table|
       ActiveRecord::Base.connection.table_exists? table
@@ -81,22 +106,5 @@ class RedmineActsAsTaggableOn::Migration < ActsAsTaggableOnMigration
 
   def ok_to_go_down?
     plugins_still_using_tables.empty?
-  end
-
-  def enforce_declarations!
-    unless current_plugin_declaration_made?
-      msg = "You have to declare that you need redmine_acts_as_taggable_on inside\n"
-      msg << "init.rb. See https://github.com/hdgarrood/redmine_acts_as_taggable_on\n"
-      msg << "for more details.\n\n"
-      fail msg
-    end
-  end
-
-  def current_plugin_declaration_made?
-    current_plugin.requires_acts_as_taggable_on?
-  end
-
-  def current_plugin
-    Redmine::Plugin::Migrator.current_plugin
   end
 end

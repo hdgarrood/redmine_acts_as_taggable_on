@@ -106,3 +106,33 @@ end" > plugins/redmine_baz/db/migrate/001_add_tags.rb
   [ "$status" -ne 0 ]
   assert_contain 'table does not match' "$output"
 }
+
+@test "enforces that declarations were made" {
+  mk_plugin_missing_declaration "quux"
+
+  run rake redmine:plugins:migrate
+  [ "$status" -ne 0 ]
+  echo "$output"
+  assert_contain 'You have to declare that you need' "$output"
+}
+
+@test "warns about acts-as-taggable-on when going up" {
+  mk_proper_plugin "foo"
+  mk_old_style_plugin "bar"
+
+  run rake redmine:plugins:migrate
+  [ "$status" -eq 0 ]
+  echo "$output"
+  assert_contain "WARNING: The plugin redmine_bar is using 'acts-" "$output"
+}
+
+@test "warns about acts-as-taggable-on when going down" {
+  mk_proper_plugin "foo"
+  mk_old_style_plugin "bar"
+
+  rake redmine:plugins:migrate
+  run rake redmine:plugins:migrate NAME=redmine_foo VERSION=0
+  [ "$status" -eq 0 ]
+  echo "$output"
+  assert_contain "WARNING: The plugin redmine_bar is using 'acts-" "$output"
+}
