@@ -8,14 +8,14 @@ preserved_files=(db/redmine.sqlite3 db/schema.rb)
 
 setup() {
   pushd "$temp_redmine_path/redmine" >/dev/null
-  for file in $preserved_files; do
+  for file in ${preserved_files[@]}; do
       cp $file $file.bak
   done
 }
 
 teardown() {
   rm -rf plugins/*
-  for file in $preserved_files; do
+  for file in ${preserved_files[@]}; do
       mv $file.bak $file
   done
   popd >/dev/null

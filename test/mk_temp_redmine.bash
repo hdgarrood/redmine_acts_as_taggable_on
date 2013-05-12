@@ -19,12 +19,13 @@ make_temp_redmine() {
   adapter: sqlite3
   database: db/redmine.sqlite3" > config/database.yml
 
-  bundle install
+  bundle install \
+    --without="postgresql development test mysql rmagick ldap"
   rake generate_secret_token db:create db:migrate
 
   popd
   popd
 }
 
-make_temp_redmine >/dev/null
+make_temp_redmine "$1" >/dev/null
 echo "$temp_redmine"

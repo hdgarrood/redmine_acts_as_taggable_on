@@ -3,7 +3,12 @@ set -e
 
 # Run all the tests on a specific branch of Redmine.
 run_tests_on_branch() {
-  temp_redmine_path="`test/mk_temp_redmine.bash "$1"`"
+  temp_redmine_path="$(test/mk_temp_redmine.bash "$1")"
+  if [ "$?" -ne 0 ]; then
+    echo "failed to create temporary redmine on $1: cancelling these tests"
+    return 1
+  fi
+
   export temp_redmine_path
 
   [ -f test/bats/bin/bats ] || git submodule update
@@ -12,11 +17,12 @@ run_tests_on_branch() {
   test/bats/bin/bats test/test.bats || test_status=1
 
   if [ "$test_status" -eq 1 ]; then
-    echo "Some tests failed on redmine:$1. You can inspect the tree at $temp_redmine_path"
+    echo "Some tests failed on $1. You can inspect the tree at $temp_redmine_path"
   else
     rm -rf "$temp_redmine_path"
   fi
 
+  temp_redmine_path=""
   return $test_status
 }
 
@@ -27,7 +33,8 @@ redmine_acts_as_taggable_on_path="$(cd "$(dirname "${BASH_SOURCE[0]}")"/.. && pw
 export redmine_acts_as_taggable_on_path
 pushd "$redmine_acts_as_taggable_on_path" >/dev/null
 
-branches=(trunk tags/2.3.1 tags/2.2.4 tags/2.1.5)
+[ -z "$branches" ] && \
+  branches=(trunk tags/2.3.1 tags/2.2.4 tags/2.1.5 tags/2.0.4 tags/1.4.7)
 test_status=0
 
 for branch in ${branches[@]}; do
