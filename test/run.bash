@@ -16,7 +16,12 @@ export temp_redmine_path
 test_status=0
 test/bats/bin/bats test/test.bats || test_status=1
 
-rm -rf "$temp_redmine_path"
 popd >/dev/null
+
+if [ "$test_status" -eq 1 ]; then
+  echo "Some tests failed. You can inspect the tree at $temp_redmine_path"
+else
+  rm -rf "$temp_redmine_path"
+fi
 
 exit $test_status

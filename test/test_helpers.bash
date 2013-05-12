@@ -1,15 +1,16 @@
 #!/usr/bin/env bash
 
-# A plugin using the gem properly.
-mk_foo_plugin() {
-  mkdir plugins/redmine_foo
-  cd plugins/redmine_foo
+# Create a plugin which uses the gem properly. It's given the name redmine_$1
+mk_proper_plugin() {
+  local name="redmine_$1"
+  mkdir plugins/$name
+  cd plugins/$name
 
   echo "gem 'redmine_acts_as_taggable_on',
   :path => '$redmine_acts_as_taggable_on_path'" > Gemfile
 
   echo "require 'redmine_acts_as_taggable_on/initialize'
-Redmine::Plugin.register(:redmine_foo) { requires_acts_as_taggable_on }" \
+Redmine::Plugin.register(:$name) { requires_acts_as_taggable_on }" \
     > init.rb
 
   mkdir -p db/migrate
