@@ -4,8 +4,8 @@ script: "./test/run.bash"
 matrix:
   include:
     - rvm: "2.0.0"
-      env: "branches=(trunk tags/2.3.1)"
+      env: 'branches="(trunk tags/2.3.1)"'
     - rvm: "1.9.3-p392"
-      env: "branches=(trunk tags/2.3.1 tags/2.2.4 tags/2.1.5)"
+      env: 'branches="(trunk tags/2.3.1 tags/2.2.4 tags/2.1.5)"'
     - rvm: "1.8.7"
-      env: "branches=(trunk tags/2.3.1 tags/2.2.4 tags/2.1.5)"
+      env: 'branches="(trunk tags/2.3.1 tags/2.2.4 tags/2.1.5)"'
