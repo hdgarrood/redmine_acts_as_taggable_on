@@ -1,10 +1,23 @@
 #!/usr/bin/env bash
 
-# Create a plugin which uses the gem properly. It's given the name redmine_$1
-mk_proper_plugin() {
+# Create an empty skeleton Redmine plugin. It's given the name redmine_$1.
+mk_standard_plugin() {
   local name="redmine_$1"
   mkdir plugins/$name
-  cd plugins/$name
+  pushd plugins/$name >/dev/null
+
+  echo "Redmine::Plugin.register(:$name) { name '$name' }" > init.rb
+
+  popd >/dev/null
+
+  echo "Created a standard redmine plugin: $name"
+}
+
+# Create a plugin which uses the redmine_acts_as_taggable_on gem properly.
+mk_proper_plugin() {
+  mk_standard_plugin "$1"
+  local name="redmine_$1"
+  pushd plugins/$name >/dev/null
 
   echo "gem 'redmine_acts_as_taggable_on',
   :path => '$redmine_acts_as_taggable_on_path'" > Gemfile
@@ -19,7 +32,9 @@ Redmine::Plugin.register(:$name) { requires_acts_as_taggable_on }" \
 
   bundle >/dev/null
 
-  cd ../..
+  popd >/dev/null
+
+  echo "Created a redmine plugin using redmine_acts_as_taggable_on: $name"
 }
 
 db_query() {
@@ -40,4 +55,14 @@ db_table_exists() {
   fi
 
   return $exists
+}
+
+assert_contain() {
+  echo -n "Checking whether a string contains '$1'... "
+  if [[ "$2" == *"$1"* ]]; then
+      echo "Yep."
+  else
+      echo "Nope."
+      return 1
+  fi
 }

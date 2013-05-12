@@ -7,7 +7,7 @@ load test_helpers
 preserved_files=(db/redmine.sqlite3 db/schema.rb)
 
 setup() {
-  pushd "$temp_redmine_path/redmine"
+  pushd "$temp_redmine_path/redmine" >/dev/null
   for file in $preserved_files; do
       cp $file $file.bak
   done
@@ -18,7 +18,7 @@ teardown() {
   for file in $preserved_files; do
       mv $file.bak $file
   done
-  popd
+  popd >/dev/null
 }
 
 @test "migrates upwards with solitary proper plugin" {
@@ -45,7 +45,7 @@ teardown() {
   mk_proper_plugin "bar"
   run rake redmine:plugins:migrate
   [ "$status" -eq 0 ]
-  [[ "$output" == *'Not creating "tags" and "taggings"'* ]]
+  assert_contain 'Not creating "tags" and "taggings"' "$output"
 
   db_table_exists 'tags'
   db_table_exists 'taggings'
@@ -60,12 +60,12 @@ teardown() {
   echo 'Now migrating down...'
   run rake redmine:plugins:migrate NAME=redmine_foo VERSION=0
   [ "$status" -eq 0 ]
-  [[ "$output" == *'Not dropping "tags" and "taggings"'* ]]
+  assert_contain 'Not dropping "tags" and "taggings"' "$output"
 
   # Should say still needed by redmine_bar
-  [[ "$output" == *'-> redmine_bar'* ]]
+  assert_contain '-> redmine_bar' "$output"
   # Should not say still needed by redmine_foo
-  [[ "$output" != *'-> redmine_foo'* ]]
+  ! assert_contain '-> redmine_foo' "$output"
 
   db_table_exists 'tags'
   db_table_exists 'taggings'
@@ -84,4 +84,25 @@ teardown() {
 }
 
 @test "schema sanity check when migrating proper plugin up" {
+  mk_standard_plugin "baz"
+
+  mkdir -p plugins/redmine_baz/db/migrate
+  echo "class AddTags < ActiveRecord::Migration
+  def up
+    create_table :tags do |t|
+      t.integer :foo
+    end
+  end
+
+  def down
+    drop_table :tags
+  end
+end" > plugins/redmine_baz/db/migrate/001_add_tags.rb
+
+  rake redmine:plugins:migrate
+
+  mk_proper_plugin "foo"
+  run rake redmine:plugins:migrate
+  [ "$status" -ne 0 ]
+  assert_contain 'table does not match' "$output"
 }

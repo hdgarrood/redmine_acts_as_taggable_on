@@ -1,6 +1,8 @@
 require 'generators/acts_as_taggable_on/migration/templates/active_record/migration'
 
 class RedmineActsAsTaggableOn::Migration < ActsAsTaggableOnMigration
+  class SchemaMismatchError < StandardError; end
+
   def up
     enforce_declarations!
 
@@ -25,9 +27,48 @@ class RedmineActsAsTaggableOn::Migration < ActsAsTaggableOnMigration
 
   private
   def ok_to_go_up?
-    %w(tags taggings).all? do |table|
-      !(ActiveRecord::Base.connection.table_exists? table)
+    tables_already_exist = %w(tags taggings).any? do |table|
+      ActiveRecord::Base.connection.table_exists? table
     end
+    if tables_already_exist
+      assert_schema_match!
+      return false
+    end
+    true
+  end
+
+  def assert_schema_match!
+    if (obtain_structure('tags') != expected_tags_structure) ||
+       (obtain_structure('taggings') != expected_taggings_structure)
+      msg = "A plugin is already using the \"tags\" or \"taggings\" tables, and\n"
+      msg << "the structure of the table does not match the structure expected\n"
+      msg << "by #{current_plugin.id}."
+      raise SchemaMismatchError, msg
+    end
+  end
+
+  def obtain_structure(table_name)
+    ActiveRecord::Base.connection.columns(table_name).
+      reject { |c| %w(created_at updated_at id).include? c.name }.
+      map { |c| [c.name, c.type.to_s] }.
+      sort
+  end
+
+  def expected_tags_structure
+    [
+      ['name', 'string']
+    ]
+  end
+
+  def expected_taggings_structure
+    [
+      ['tag_id', 'integer'],
+      ['taggable_id', 'integer'],
+      ['taggable_type', 'string'],
+      ['tagger_id', 'integer'],
+      ['tagger_type', 'string'],
+      ['context', 'string'],
+    ].sort
   end
 
   # A list of plugins which are using the acts_as_taggable_on tables (excluding
@@ -52,6 +93,10 @@ class RedmineActsAsTaggableOn::Migration < ActsAsTaggableOnMigration
   end
 
   def current_plugin_declaration_made?
-    Redmine::Plugin::Migrator.current_plugin.requires_acts_as_taggable_on?
+    current_plugin.requires_acts_as_taggable_on?
+  end
+
+  def current_plugin
+    Redmine::Plugin::Migrator.current_plugin
   end
 end
