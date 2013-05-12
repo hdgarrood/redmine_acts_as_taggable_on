@@ -4,10 +4,15 @@ set -e
 # makes a new Redmine installation in a temporary directory, using SQLite as
 # the database.
 make_temp_redmine() {
-  temp_redmine=`mktemp -d /tmp/redmine_acts_as_taggable_on.tmp.XXXXXXXX`
+  local branch="$1"
+  [ -z "$branch" ] && branch="trunk"
+
+  # for branches which have slashes in them, like tags/2.3.0
+  local branch_filename="${branch//\//-}"
+  temp_redmine=`mktemp -d /tmp/redmine_acts_as_taggable_on.$branch_filename.XXXXXXX`
   pushd "$temp_redmine"
 
-  svn checkout http://svn.redmine.org/redmine/trunk redmine
+  svn checkout "http://svn.redmine.org/redmine/$branch" redmine
   pushd redmine
 
   echo "production:
