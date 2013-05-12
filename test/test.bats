@@ -56,15 +56,32 @@ teardown() {
   mk_proper_plugin "bar"
 
   rake redmine:plugins:migrate
+
+  echo 'Now migrating down...'
   run rake redmine:plugins:migrate NAME=redmine_foo VERSION=0
   [ "$status" -eq 0 ]
   [[ "$output" == *'Not dropping "tags" and "taggings"'* ]]
 
-  # output should contain 'redmine_bar' (still needed by redmine_bar)
-  [[ "$output" == *'redmine_bar'* ]]
-  # output should not contain 'redmine_foo'
-  [[ "$output" != *'redmine_foo'* ]]
+  # Should say still needed by redmine_bar
+  [[ "$output" == *'-> redmine_bar'* ]]
+  # Should not say still needed by redmine_foo
+  [[ "$output" != *'-> redmine_foo'* ]]
 
   db_table_exists 'tags'
   db_table_exists 'taggings'
+}
+
+@test "migrates downwards with two proper plugins" {
+  mk_proper_plugin "foo"
+  mk_proper_plugin "bar"
+
+  rake redmine:plugins:migrate
+  rake redmine:plugins:migrate NAME=redmine_foo VERSION=0
+  rake redmine:plugins:migrate NAME=redmine_bar VERSION=0
+
+  ! db_table_exists 'tags'
+  ! db_table_exists 'taggings'
+}
+
+@test "schema sanity check when migrating proper plugin up" {
 }

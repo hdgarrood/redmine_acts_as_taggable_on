@@ -18,6 +18,12 @@ module RedmineActsAsTaggableOn::RedminePluginPatch
     false
   end
 
+  def using_acts_as_taggable_on_tables?
+    return false unless requires_acts_as_taggable_on?
+    return false if Redmine::Plugin::Migrator.current_version(self) == 0
+    true
+  end
+
   private
   def gemfile_path
     File.join(self.directory, 'Gemfile')

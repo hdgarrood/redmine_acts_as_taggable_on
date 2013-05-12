@@ -4,10 +4,10 @@ class RedmineActsAsTaggableOn::Migration < ActsAsTaggableOnMigration
   def up
     enforce_declarations!
 
-    if performed?
-      say 'Not creating "tags" and "taggings" because they already exist'
-    else
+    if ok_to_go_up?
       super
+    else
+      say 'Not creating "tags" and "taggings" because they already exist'
     end
   end
 
@@ -19,33 +19,27 @@ class RedmineActsAsTaggableOn::Migration < ActsAsTaggableOnMigration
     else
       say 'Not dropping "tags" and "taggings" because they\'re still needed by'
       say 'the following plugins:'
-      requiring_plugins.each { |p| say p.id, true }
+      plugins_still_using_tables.each { |p| say p.id, true }
     end
   end
 
   private
-  def performed?
-    ['tags', 'taggings'].any? do |table|
-      ActiveRecord::Base.connection.table_exists? table
+  def ok_to_go_up?
+    %w(tags taggings).all? do |table|
+      !(ActiveRecord::Base.connection.table_exists? table)
     end
   end
 
-  # A list of plugins which require redmine_acts_as_taggable_on.
-  #
-  # We reject the current one because we don't want to say
-  #
-  #   refusing to migrate redmine_foo down: tags and taggings tables are still
-  #   required by redmine_foo
-  #
-  # That would be silly.
-  def requiring_plugins
+  # A list of plugins which are using the acts_as_taggable_on tables (excluding
+  # the current one)
+  def plugins_still_using_tables
     Redmine::Plugin.all.
-      select(&:requires_acts_as_taggable_on?).
+      select(&:using_acts_as_taggable_on_tables?).
       reject {|p| p == Redmine::Plugin::Migrator.current_plugin }
   end
 
   def ok_to_go_down?
-    requiring_plugins.empty?
+    plugins_still_using_tables.empty?
   end
 
   def enforce_declarations!

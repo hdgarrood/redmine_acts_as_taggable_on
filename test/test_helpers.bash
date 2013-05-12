@@ -31,4 +31,13 @@ db_table_exists() {
   db_query "SELECT 'it exists'
   FROM sqlite_master
   WHERE type='table' AND name='$1'" | grep 'it exists' >/dev/null
+
+  exists="$?"
+  if [ "$exists" -eq 1 ]; then
+      echo "Database table $1 exists."
+  else
+      echo "Database table $1 does not exist."
+  fi
+
+  return $exists
 }
