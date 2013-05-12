@@ -42,7 +42,7 @@ class RedmineActsAsTaggableOn::Migration < ActsAsTaggableOnMigration
        (obtain_structure('taggings') != expected_taggings_structure)
       msg = "A plugin is already using the \"tags\" or \"taggings\" tables, and\n"
       msg << "the structure of the table does not match the structure expected\n"
-      msg << "by #{current_plugin.id}."
+      msg << "by #{current_plugin.id}.\n"
       raise SchemaMismatchError, msg
     end
   end
