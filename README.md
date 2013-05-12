@@ -49,7 +49,7 @@ some nasty monkey-patching. On the other hand, data loss is no fun at all.
 
 Add it to your plugin's Gemfile:
 
-    gem 'redmine_acts_as_taggable_on', '~> 0.2'
+    gem 'redmine_acts_as_taggable_on', '~> 0.2.0'
 
 Add the migration:
 
