@@ -30,12 +30,9 @@ print a gentle(-ish) suggestion to use this gem instead.
 
 ## Status
 
-**Not quite ready for prime-time.**
-
-* No automated tests, yet (I'm working on it!)
-* No known bugs
-* Tested with Redmine trunk (as of 2013-05-09) only
-* Not yet used by any Redmine plugins in the wild
+Believed to be stable. The automated tests currently pass on Redmine trunk,
+2.3.1, 2.2.4, and 2.1.5. However, this gem is not yet used by any Redmine
+plugins in the wild.
 
 ## Limitations
 
@@ -52,7 +49,7 @@ some nasty monkey-patching. On the other hand, data loss is no fun at all.
 
 Add it to your plugin's Gemfile:
 
-    gem 'redmine_acts_as_taggable_on', '~> 0.1'
+    gem 'redmine_acts_as_taggable_on', '~> 0.2'
 
 Add the migration:
 
@@ -67,4 +64,31 @@ Declare that your plugin needs `redmine_acts_as_taggable_on` inside init.rb:
       requires_acts_as_taggable_on
       ...
 
-That's it. Your plugin should now migrate up and down intelligently.
+That's it. Your plugin will now migrate up and down intelligently. For example:
+
+    cd /path/to/redmine
+
+    cp -r /some/plugin/using/this/gem       plugins/redmine_foo
+    cp -r /another/plugin/using/this/gem    plugins/redmine_bar
+
+    rake redmine:plugins:migrate
+
+    Migrating redmine_bar (Redmine bar)...
+    ==  AddTagsAndTaggings: migrating =========================================
+    -- create_table(:tags)
+       -> 0.0039s
+    -- create_table(:taggings)
+       -> 0.0007s
+    -- add_index(:taggings, :tag_id)
+       -> 0.0003s
+    -- add_index(:taggings, [:taggable_id, :taggable_type, :context])
+       -> 0.0003s
+    ==  AddTagsAndTaggings: migrated (0.0059s) ================================
+
+    Migrating redmine_foo (Redmine foo)...
+    ==  AddTagsAndTaggings: migrating =========================================
+    -- Not creating "tags" and "taggings" because they already exist
+    ==  AddTagsAndTaggings: migrated (0.0006s) ================================
+
+You can look at the [test script](test/test.bats) to see how other situations
+are handled.
