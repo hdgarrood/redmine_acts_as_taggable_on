@@ -33,10 +33,12 @@ redmine_acts_as_taggable_on_path="$(cd "$(dirname "${BASH_SOURCE[0]}")"/.. && pw
 export redmine_acts_as_taggable_on_path
 pushd "$redmine_acts_as_taggable_on_path" >/dev/null
 
-[ -z "$branches" ] && branches=(tags/2.3.1)
+# branches should be a space-separated string of repo paths to check out.
+# We don't use an array because they're difficult to export.
+[ -z "$branches" ] && branches="tags/2.3.1"
 test_status=0
 
-for branch in ${branches[@]}; do
+for branch in $branches; do
   echo    "testing on: $branch"
   echo -n "============"
   # make the underline the same length as the title
