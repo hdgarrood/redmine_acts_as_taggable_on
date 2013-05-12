@@ -19,7 +19,8 @@ mk_proper_plugin() {
   local name="redmine_$1"
   pushd plugins/$name >/dev/null
 
-  echo "gem 'redmine_acts_as_taggable_on',
+  echo "source 'https://rubygems.org'
+gem 'redmine_acts_as_taggable_on',
   :path => '$redmine_acts_as_taggable_on_path'" > Gemfile
 
   echo "require 'redmine_acts_as_taggable_on/initialize'
@@ -60,7 +61,8 @@ mk_old_style_plugin() {
   local name="redmine_$1"
   pushd plugins/$name >/dev/null
 
-  echo "gem 'acts-as-taggable-on'" > Gemfile
+  echo "source 'https://rubygems.org'
+gem 'acts-as-taggable-on'" > Gemfile
   bundle >/dev/null
   popd >/dev/null
 

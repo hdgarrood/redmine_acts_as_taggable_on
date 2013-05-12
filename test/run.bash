@@ -33,13 +33,12 @@ redmine_acts_as_taggable_on_path="$(cd "$(dirname "${BASH_SOURCE[0]}")"/.. && pw
 export redmine_acts_as_taggable_on_path
 pushd "$redmine_acts_as_taggable_on_path" >/dev/null
 
-[ -z "$branches" ] && \
-  branches=(trunk tags/2.3.1 tags/2.2.4 tags/2.1.5 tags/2.0.4 tags/1.4.7)
+[ -z "$branches" ] && branches=(tags/2.3.1)
 test_status=0
 
 for branch in ${branches[@]}; do
-  echo    "testing on branch: $branch"
-  echo -n "==================="
+  echo    "testing on: $branch"
+  echo -n "============"
   # make the underline the same length as the title
   echo ${branch//?/=}
 
