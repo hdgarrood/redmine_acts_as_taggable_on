@@ -10,7 +10,7 @@ make_temp_redmine() {
   svn checkout http://svn.redmine.org/redmine/trunk redmine
   pushd redmine
 
-  echo "development:
+  echo "production:
   adapter: sqlite3
   database: db/redmine.sqlite3" > config/database.yml
 

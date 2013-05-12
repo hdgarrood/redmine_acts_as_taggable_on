@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-RAILS_ENV=development
+RAILS_ENV="production"
 export RAILS_ENV
 
 redmine_acts_as_taggable_on_path="$(cd "$(dirname "${BASH_SOURCE[0]}")"/.. && pwd)"
