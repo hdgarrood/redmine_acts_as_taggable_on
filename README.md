@@ -53,7 +53,7 @@ Add it to your plugin's Gemfile:
 
 Add the migration:
 
-    echo 'class AddTagsAndTaggings < RedmineActsAsTaggableOn::Migration; end' \
+    $ echo 'class AddTagsAndTaggings < RedmineActsAsTaggableOn::Migration; end'\
         > db/migrate/001_add_tags_and_taggings.rb
 
 Declare that your plugin needs `redmine_acts_as_taggable_on` inside init.rb:
@@ -66,13 +66,10 @@ Declare that your plugin needs `redmine_acts_as_taggable_on` inside init.rb:
 
 That's it. Your plugin will now migrate up and down intelligently. For example:
 
-    cd /path/to/redmine
-
-    cp -r /some/plugin/using/this/gem       plugins/redmine_foo
-    cp -r /another/plugin/using/this/gem    plugins/redmine_bar
-
-    rake redmine:plugins:migrate
-
+    $ cd /path/to/redmine
+    $ cp -r /some/plugin/using/this/gem       plugins/redmine_foo
+    $ cp -r /another/plugin/using/this/gem    plugins/redmine_bar
+    $ rake redmine:plugins:migrate
     Migrating redmine_bar (Redmine bar)...
     ==  AddTagsAndTaggings: migrating =========================================
     -- create_table(:tags)
