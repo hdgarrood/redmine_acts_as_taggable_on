@@ -31,8 +31,9 @@ print a gentle(-ish) suggestion to use this gem instead.
 ## Status
 
 Believed to be stable. The automated tests currently pass on Redmine trunk,
-2.3.1, 2.2.4, and 2.1.5. However, this gem is not yet used by any Redmine
-plugins in the wild.
+2.3.1, 2.2.4, 2.1.5, and 2.0.4 (which are, at the time of writing, the most
+recent releases of every 2.x branch). However, this gem is not yet used by any
+Redmine plugins in the wild.
 
 ## Limitations
 
@@ -49,7 +50,7 @@ some nasty monkey-patching. On the other hand, data loss is no fun at all.
 
 Add it to your plugin's Gemfile:
 
-    gem 'redmine_acts_as_taggable_on', '~> 0.2.0'
+    gem 'redmine_acts_as_taggable_on', '~> 0.2.1'
 
 Add the migration:
 
