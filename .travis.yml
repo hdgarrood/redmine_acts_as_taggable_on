@@ -1,6 +1,6 @@
 language: ruby
 # we need rubygems <= 1.8 according to RedmineInstall
-before_script: gem update --system 1.8.23
+before_script: gem update --system 1.8.0
 script: ./test/run.bash
 matrix:
   - rvm: 2.0.0
