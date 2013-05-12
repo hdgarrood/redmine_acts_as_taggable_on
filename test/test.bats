@@ -131,6 +131,11 @@ end" > plugins/redmine_baz/db/migrate/001_add_tags.rb
   mk_old_style_plugin "bar"
 
   rake redmine:plugins:migrate
+
+  # Note that we have to migrate redmine_foo down so that the
+  # RedmineActsAsTaggableOn::Migration class does the migration, because it
+  # does the checking. Migrating redmine_bar down would not trigger the
+  # warning.
   run rake redmine:plugins:migrate NAME=redmine_foo VERSION=0
   [ "$status" -eq 0 ]
   echo "$output"
