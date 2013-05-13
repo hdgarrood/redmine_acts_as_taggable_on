@@ -1,7 +1,5 @@
 language: ruby
-install:
-  - gem update --system 1.8.15
-  - gem env
+install: ""
 script: ./test/run.bash
 rvm:
   - 2.0.0-p0
