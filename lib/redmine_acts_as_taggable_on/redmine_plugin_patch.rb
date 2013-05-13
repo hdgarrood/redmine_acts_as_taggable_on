@@ -1,6 +1,9 @@
 module RedmineActsAsTaggableOn::RedminePluginPatch
   def requires_acts_as_taggable_on
     @requires_acts_as_taggable_on = true
+    if Redmine::VERSION::MAJOR < 2
+      fail 'redmine_acts_as_taggable_on requires Redmine 2.x or higher.'
+    end
   end
 
   def requires_acts_as_taggable_on?

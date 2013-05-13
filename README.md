@@ -28,12 +28,14 @@ through their Gemfiles for the string `acts-as-taggable-on` -- if found, it
 will treat the plugin as requiring the `acts-as-taggable-on` tables, and will
 print a gentle(-ish) suggestion to use this gem instead.
 
-## Status
+## Status and Compatibility
 
 Believed to be stable. The automated tests currently pass on Redmine trunk,
 2.3.1, 2.2.4, 2.1.5, and 2.0.4 (which are, at the time of writing, the most
 recent releases of every 2.x branch). However, this gem is not yet used by any
 Redmine plugins in the wild.
+
+This gem is not compatible with Redmine 1.x.
 
 ## Limitations
 
@@ -50,7 +52,7 @@ some nasty monkey-patching. On the other hand, data loss is no fun at all.
 
 Add it to your plugin's Gemfile:
 
-    gem 'redmine_acts_as_taggable_on', '~> 0.2.1'
+    gem 'redmine_acts_as_taggable_on', '~> 0.3.0'
 
 Add the migration:
 
