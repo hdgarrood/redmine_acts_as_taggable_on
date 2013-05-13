@@ -1,8 +1,7 @@
 language: ruby
-before_install:
+install:
   - gem update --system 1.8.25
   - gem --version
-  - gem install 'sqlite3'
 script: ./test/run.bash
 rvm: 2.0.0-p0
 env: branches="trunk"
