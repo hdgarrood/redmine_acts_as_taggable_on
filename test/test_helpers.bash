@@ -30,9 +30,8 @@ Redmine::Plugin.register(:$name) { requires_acts_as_taggable_on }" \
   echo "class AddTagsAndTaggings < RedmineActsAsTaggableOn::Migration; end" \
     > db/migrate/001_add_tags_and_taggings.rb
 
-  bundle --gemfile="$PWD/Gemfile">/dev/null
-
   cd ../..
+  bundle --gemfile="$PWD/Gemfile">/dev/null
   echo "Created a redmine plugin using redmine_acts_as_taggable_on: $name"
 }
 
@@ -60,9 +59,9 @@ mk_old_style_plugin() {
 
   echo "source 'https://rubygems.org'
 gem 'acts-as-taggable-on'" > Gemfile
-  bundle --gemfile="$PWD/Gemfile">/dev/null
 
   cd ../..
+  bundle --gemfile="$PWD/Gemfile">/dev/null
   echo "Created a plugin using acts-as-taggable-on without the embedded"
   echo "  migration: $name"
 }
