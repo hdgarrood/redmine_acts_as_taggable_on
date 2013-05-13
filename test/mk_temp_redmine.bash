@@ -26,6 +26,8 @@ echo "production:
   adapter: sqlite3
   database: db/redmine.sqlite3" > config/database.yml
 
+pwd > "$mk_temp_redmine_out"
+
 bundle install \
   --without="postgresql development test mysql rmagick ldap" \
   > "$mk_temp_redmine_out"
