@@ -7,7 +7,6 @@ load test_helpers
 preserved_files=(db/redmine.sqlite3 db/schema.rb)
 
 setup() {
-  pushd "$temp_redmine_path/redmine" >/dev/null
   for file in ${preserved_files[@]}; do
       cp $file $file.bak
   done
@@ -18,7 +17,6 @@ teardown() {
   for file in ${preserved_files[@]}; do
       mv $file.bak $file
   done
-  popd >/dev/null
 }
 
 @test "migrates upwards with solitary proper plugin" {
