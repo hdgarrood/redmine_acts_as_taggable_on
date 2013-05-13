@@ -3,7 +3,7 @@ set -e
 
 # Run all the tests on a specific branch of Redmine.
 run_tests_on_branch() {
-  local temp_redmine_path="$(test/mk_temp_redmine.bash "$1")"
+  local temp_redmine_path="$($redmine_acts_as_taggable_on_path/test/mk_temp_redmine.bash "$1")"
   if [ "$?" -ne 0 ] || [ -z "$temp_redmine_path" ]; then
     echo "failed to create temporary redmine on $1: cancelling these tests"
     return 1
