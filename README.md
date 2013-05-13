@@ -30,9 +30,11 @@ print a gentle(-ish) suggestion to use this gem instead.
 
 ## Status and Compatibility
 
-Believed to be stable. The automated tests currently pass on Redmine trunk,
-2.3.1, 2.2.4, 2.1.5, and 2.0.4 (which are, at the time of writing, the most
-recent releases of every 2.x branch). However, this gem is not yet used by any
+Believed to be stable. There is an automated test suite, which is run on
+[Travis CI](https://travis-ci.org/hdgarrood/redmine_acts_as_taggable_on), on
+each of the most recent releases of every 2.x branch and trunk, on every MRI
+version supported by Redmine for that particular release (that's a build matrix
+of 12 separate builds in total). However, this gem is not yet used by any
 Redmine plugins in the wild.
 
 This gem is not compatible with Redmine 1.x.
