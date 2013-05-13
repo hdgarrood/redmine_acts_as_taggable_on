@@ -33,6 +33,7 @@ bundle install \
   --gemfile="$PWD/Gemfile" \
   > "$mk_temp_redmine_out"
 bundle exec rake generate_secret_token db:create db:migrate \
+  --gemfile="$PWD/Gemfile"
   > "$mk_temp_redmine_out"
 
 echo "$temp_redmine"
