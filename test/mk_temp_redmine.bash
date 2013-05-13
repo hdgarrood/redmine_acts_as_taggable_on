@@ -39,6 +39,8 @@ echo "so here's the contents of the Gemfile i'm *supposed* to be using:" \
 
 cat Gemfile > "$mk_temp_redmine_out"
 
+echo "\$BUNDLE_GEMFILE is $BUNDLE_GEMFILE" > "$mk_temp_redmine_out"
+
 bundle exec rake db:create db:migrate \
   --gemfile="$PWD/Gemfile"> "$mk_temp_redmine_out"
 
