@@ -33,8 +33,13 @@ bundle install \
   --gemfile="$PWD/Gemfile" \
   > "$mk_temp_redmine_out"
 
-echo "managed to bundle install" > "$mk_temp_redmine_out"
+echo "managed to bundle install." > "$mk_temp_redmine_out"
+echo "so here's the contents of the Gemfile i'm *supposed* to be using:" \
+  > "$mk_temp_redmine_out"
 
-rake db:create db:migrate > "$mk_temp_redmine_out"
+cat Gemfile > "$mk_temp_redmine_out"
+
+bundle exec rake db:create db:migrate \
+  --gemfile="$PWD/Gemfile"> "$mk_temp_redmine_out"
 
 echo "$temp_redmine"
