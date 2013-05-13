@@ -16,6 +16,9 @@ run_tests_on_branch() {
   "$redmine_acts_as_taggable_on_path/test/bats/bin/bats" \
     "$redmine_acts_as_taggable_on_path/test/test.bats" || test_status=1
 
+  # avoid 'error retrieving current directory' during the next test
+  cd /tmp
+
   if [ "$test_status" -eq 1 ]; then
     echo "Some tests failed on $1. You can inspect the tree at $temp_redmine_path"
   else
