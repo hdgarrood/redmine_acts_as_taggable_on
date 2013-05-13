@@ -21,7 +21,7 @@ teardown() {
 
 @test "migrates upwards with solitary proper plugin" {
   mk_proper_plugin "foo"
-  rake redmine:plugins:migrate
+  bundle exec rake redmine:plugins:migrate
 
   db_table_exists 'tags'
   db_table_exists 'taggings'
