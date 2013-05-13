@@ -31,6 +31,7 @@ echo "pwd is: $PWD" > "$mk_temp_redmine_out"
 bundle install \
   --without="postgresql development test mysql rmagick ldap" \
   --gemfile="$PWD/Gemfile" \
+  --binstubs \
   > "$mk_temp_redmine_out"
 
 echo "managed to bundle install." > "$mk_temp_redmine_out"

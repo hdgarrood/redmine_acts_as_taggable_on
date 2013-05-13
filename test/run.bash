@@ -35,6 +35,9 @@ export BUNDLE_GEMFILE
 redmine_acts_as_taggable_on_path="$(cd "$(dirname "${BASH_SOURCE[0]}")"/.. && pwd)"
 export redmine_acts_as_taggable_on_path
 
+# for binstubs
+export PATH="./bin:$PATH"
+
 # branches should be a space-separated string of repo paths to check out.
 # We don't use an array because they're difficult to export.
 [ -z "$branches" ] && branches="tags/2.3.1"
