@@ -30,9 +30,8 @@ echo "pwd is: $PWD" > "$mk_temp_redmine_out"
 
 bundle install \
   --without="postgresql development test mysql rmagick ldap" \
-  --gemfile="$PWD/Gemfile" \
   > "$mk_temp_redmine_out"
-rake generate_secret_token db:create db:migrate \
+bundle exec rake generate_secret_token db:create db:migrate \
   > "$mk_temp_redmine_out"
 
 echo "$temp_redmine"
