@@ -26,10 +26,11 @@ echo "production:
   adapter: sqlite3
   database: db/redmine.sqlite3" > config/database.yml
 
-pwd > "$mk_temp_redmine_out"
+echo "pwd is: $PWD" > "$mk_temp_redmine_out"
 
 bundle install \
   --without="postgresql development test mysql rmagick ldap" \
+  --gemfile="$PWD/Gemfile" \
   > "$mk_temp_redmine_out"
 rake generate_secret_token db:create db:migrate \
   > "$mk_temp_redmine_out"
