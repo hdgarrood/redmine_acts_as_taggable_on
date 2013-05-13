@@ -28,6 +28,10 @@ run_tests_on_branch() {
 RAILS_ENV="production"
 export RAILS_ENV
 
+# this is needed on Travis CI
+BUNDLE_GEMFILE=""
+export BUNDLE_GEMFILE
+
 redmine_acts_as_taggable_on_path="$(cd "$(dirname "${BASH_SOURCE[0]}")"/.. && pwd)"
 export redmine_acts_as_taggable_on_path
 
