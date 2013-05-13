@@ -17,10 +17,10 @@ branch="$1"
 # for branches which have slashes in them, like tags/2.3.0
 branch_filename="${branch//\//-}"
 temp_redmine=`mktemp -d /tmp/redmine_acts_as_taggable_on.$branch_filename.XXXXXXX`
-pushd "$temp_redmine" >/dev/null
+cd "$temp_redmine"
 
 svn checkout "http://svn.redmine.org/redmine/$branch" redmine >/dev/null
-pushd redmine >/dev/null
+cd redmine
 
 echo "production:
   adapter: sqlite3
@@ -34,8 +34,5 @@ bundle install \
   > "$mk_temp_redmine_out"
 rake generate_secret_token db:create db:migrate \
   > "$mk_temp_redmine_out"
-
-popd >/dev/null
-popd >/dev/null
 
 echo "$temp_redmine"
