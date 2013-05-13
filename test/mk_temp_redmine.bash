@@ -19,26 +19,19 @@ branch_filename="${branch//\//-}"
 temp_redmine=`mktemp -d /tmp/redmine_acts_as_taggable_on.$branch_filename.XXXXXXX`
 cd "$temp_redmine"
 
-svn checkout "http://svn.redmine.org/redmine/$branch" redmine >/dev/null
+svn checkout "http://svn.redmine.org/redmine/$branch" redmine \
+  > "$mk_temp_redmine_out"
 cd redmine
 
 echo "production:
   adapter: sqlite3
   database: db/redmine.sqlite3" > config/database.yml
 
-echo "pwd is: $PWD" > "$mk_temp_redmine_out"
-
 bundle install \
-  --without="postgresql development test mysql rmagick ldap" \
+  --without="development test rmagick ldap mysql postgresql" \
   --gemfile="$PWD/Gemfile" \
   --binstubs \
   > "$mk_temp_redmine_out"
-
-echo "managed to bundle install." > "$mk_temp_redmine_out"
-echo "so here's the contents of the Gemfile i'm *supposed* to be using:" \
-  > "$mk_temp_redmine_out"
-
-cat Gemfile > "$mk_temp_redmine_out"
 
 rake db:create db:migrate > "$mk_temp_redmine_out"
 

@@ -25,18 +25,14 @@ run_tests_on_branch() {
   return $test_status
 }
 
-RAILS_ENV="production"
-export RAILS_ENV
+export RAILS_ENV="production"
 
-# this is needed on Travis CI
-BUNDLE_GEMFILE=""
-export BUNDLE_GEMFILE
+# these are needed on Travis CI
+export BUNDLE_GEMFILE=""
+export PATH="./bin:$PATH"
 
 redmine_acts_as_taggable_on_path="$(cd "$(dirname "${BASH_SOURCE[0]}")"/.. && pwd)"
 export redmine_acts_as_taggable_on_path
-
-# for binstubs
-export PATH="./bin:$PATH"
 
 # branches should be a space-separated string of repo paths to check out.
 # We don't use an array because they're difficult to export.
