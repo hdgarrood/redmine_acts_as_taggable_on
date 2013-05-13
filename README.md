@@ -52,7 +52,17 @@ some nasty monkey-patching. On the other hand, data loss is no fun at all.
 
 Add it to your plugin's Gemfile:
 
-    gem 'redmine_acts_as_taggable_on', '~> 0.3.0'
+    gem 'redmine_acts_as_taggable_on', '~> 1.0'
+
+**Note**: Please use the above line _verbatim_. This is to avoid being told by
+Bundler that we aren't allowed to use multiple declarations of the same gem
+with different version requirements.
+
+I've chosen the above requirement to ensure that there are no accidental
+breakages -- the public API (that is, the following paragraph) will remain the
+same throughout version 1.0. If it does need to change, I'll bump the major
+version. This should ensure that Bundler only refuses to bundle when there is
+an actual incompatibility.
 
 Add the migration:
 
