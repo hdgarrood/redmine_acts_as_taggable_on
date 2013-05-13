@@ -1,8 +1,7 @@
 language: ruby
 install:
-# install:
-#   - gem update --system 1.8.25
-#   - gem --version
+  - gem update --system 1.8.25
+  - gem --version
 script: ./test/run.bash
 rvm: 2.0.0-p0
 env: branches="trunk"
