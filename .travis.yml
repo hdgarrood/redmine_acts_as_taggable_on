@@ -1,5 +1,5 @@
 language: ruby
-install: ""
+install: echo 'explicitly doing nothing'
 script: ./test/run.bash
 rvm:
   - 2.0.0-p0
