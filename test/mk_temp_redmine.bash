@@ -32,7 +32,10 @@ bundle install \
   --without="postgresql development test mysql rmagick ldap" \
   --gemfile="$PWD/Gemfile" \
   > "$mk_temp_redmine_out"
-bundle exec rake generate_secret_token db:create db:migrate \
+
+echo "managed to bundle install" > "$mk_temp_redmine_out"
+
+bundle exec rake db:create db:migrate \
   --gemfile="$PWD/Gemfile"
   > "$mk_temp_redmine_out"
 
