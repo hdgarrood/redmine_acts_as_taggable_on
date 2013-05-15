@@ -30,14 +30,15 @@ print a gentle(-ish) suggestion to use this gem instead.
 
 ## Status and Compatibility
 
-Believed to be stable. There is an automated test suite, which is run on
+No known bugs. There is an automated test suite, which is run on
 [Travis CI](https://travis-ci.org/hdgarrood/redmine_acts_as_taggable_on), on
 each of the most recent releases of every 2.x branch and trunk, on every MRI
 version supported by Redmine for that particular release (that's a build matrix
-of 12 separate builds in total). However, this gem is not yet used by any
-Redmine plugins in the wild.
+of 12 separate builds in total). This gem is used by the following plugins:
 
-This gem is not compatible with Redmine 1.x.
+* [redmine_blogs](https://github.com/ichizok/redmine_blogs)
+
+It is not compatible with Redmine 1.x.
 
 ## Limitations
 
