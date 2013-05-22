@@ -30,13 +30,19 @@ print a gentle(-ish) suggestion to use this gem instead.
 
 ## Status and Compatibility
 
-No known bugs. There is an automated test suite, which is run on
+`redmine_acts_as_taggable_on` should work with every 2.x release of Redmine.
+There are no known bugs (if you find one, I definitely want to know).
+
+To put your mind at ease: there is an automated test suite, which is run on
 [Travis CI](https://travis-ci.org/hdgarrood/redmine_acts_as_taggable_on), on
 each of the most recent releases of every 2.x branch and trunk, on every MRI
 version supported by Redmine for that particular release (that's a build matrix
-of 12 separate builds in total). This gem is used by the following plugins:
+of 12 separate builds in total).
+
+This gem is used by the following plugins:
 
 * [redmine_blogs](https://github.com/ichizok/redmine_blogs)
+* [redmine_knowledgebase](https://github.com/alexbevi/redmine_knowledgebase)
 
 It is not compatible with Redmine 1.x.
 
