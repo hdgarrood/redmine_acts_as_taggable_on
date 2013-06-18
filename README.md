@@ -43,6 +43,7 @@ This gem is used by the following plugins:
 
 * [redmine_blogs](https://github.com/ichizok/redmine_blogs)
 * [redmine_knowledgebase](https://github.com/alexbevi/redmine_knowledgebase)
+* [redmine_tags](https://github.com/ixti/redmine_tags)
 
 It is not compatible with Redmine 1.x.
 
