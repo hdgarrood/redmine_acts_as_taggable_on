@@ -82,6 +82,7 @@ class RedmineActsAsTaggableOn::Migration < ActsAsTaggableOnMigration
   def expected_tags_structure
     [
       ['name', 'string']
+      ['color', 'integer']
     ]
   end
 
