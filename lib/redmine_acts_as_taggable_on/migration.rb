@@ -63,14 +63,32 @@ class RedmineActsAsTaggableOn::Migration < ActsAsTaggableOnMigration
   end
 
   def assert_schema_match!
-    if (obtain_structure('tags') != expected_tags_structure) ||
-       (obtain_structure('taggings') != expected_taggings_structure)
+
+    if !ENV['TABLE_SCHEMA_CHECK_ALLOW_EXTRA_COLUMNS'].blank?
+
+      @tags_structure_intersect = obtain_structure('tags') & expected_tags_structure
+      @taggings_structure_intersect = obtain_structure('taggings') & expected_taggings_structure
+
+      if (@tags_structure_intersect != expected_tags_structure ||
+          @taggings_structure_intersect != expected_taggings_structure)
+        msg = "A plugin is already using the \"tags\" or \"taggings\" tables, and\n"
+        msg << "the structure of the table does not contain the minimum column structure expected (extra columns allowed)\n"
+        msg << "by #{current_plugin.id}.\n" 
+        raise SchemaMismatchError, msg
+         
+      end
+
+      puts "Accepting 'tags' and 'taggings' tables with extra columns."
+
+    elsif (obtain_structure('tags') != expected_tags_structure) ||
+          (obtain_structure('taggings') != expected_taggings_structure)
       msg = "A plugin is already using the \"tags\" or \"taggings\" tables, and\n"
-      msg << "the structure of the table does not match the structure expected\n"
+      msg << "the structure of the table does not strictly match the structure expected\n"
       msg << "by #{current_plugin.id}.\n"
       raise SchemaMismatchError, msg
     end
   end
+
 
   def obtain_structure(table_name)
     ActiveRecord::Base.connection.columns(table_name).
