@@ -15,9 +15,9 @@ matrix:
   exclude:
     # these versions are known not to work together, according to
     # http://www.redmine.org/projects/redmine/wiki/RedmineInstall
-    - rvm: 2.0.0-p0
+    - rvm: 2.0.0
       env: branches="tags/2.2.4"
-    - rvm: 2.0.0-p0
+    - rvm: 2.0.0
       env: branches="tags/2.1.5"
-    - rvm: 2.0.0-p0
+    - rvm: 2.0.0
       env: branches="tags/2.0.4"
