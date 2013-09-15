@@ -68,7 +68,7 @@ class RedmineActsAsTaggableOn::Migration < ActsAsTaggableOnMigration
     ENV['SCHEMA_CHECK_ALLOW_EXTRA_COLUMNS']
   end
 
-  def assert_schema_match!
+  def check_schema!
     check = SchemaCheck.new(:allow_extra_columns => allow_extra_columns?)
     fail failure_message unless check.pass?
   end
