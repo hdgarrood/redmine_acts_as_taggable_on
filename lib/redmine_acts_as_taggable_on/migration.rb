@@ -87,6 +87,8 @@ class RedmineActsAsTaggableOn::Migration < ActsAsTaggableOnMigration
       msg << "You can allow extra columns by setting the environment variable\n"
       msg << "#{allow_extra_columns_env_var_name}.\n\n"
     end
+
+    msg
   end
 
   # A list of plugins which are using the acts_as_taggable_on tables (excluding
