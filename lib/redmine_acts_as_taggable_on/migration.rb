@@ -1,8 +1,7 @@
 require 'generators/acts_as_taggable_on/migration/templates/active_record/migration'
+require 'redmine_acts_as_taggable_on/schema_check'
 
 class RedmineActsAsTaggableOn::Migration < ActsAsTaggableOnMigration
-  class SchemaMismatchError < StandardError; end
-
   def up
     enforce_declarations!
     check_for_old_style_plugins
@@ -52,66 +51,38 @@ class RedmineActsAsTaggableOn::Migration < ActsAsTaggableOnMigration
   end
 
   def ok_to_go_up?
-    tables_already_exist = %w(tags taggings).any? do |table|
-      ActiveRecord::Base.connection.table_exists? table
-    end
-    if tables_already_exist
-      assert_schema_match!
+    if tables_already_exist?
+      check_schema!
       return false
     end
     true
   end
 
-  def assert_schema_match!
-
-    if !ENV['TABLE_SCHEMA_CHECK_ALLOW_EXTRA_COLUMNS'].blank?
-
-      @tags_structure_intersect = obtain_structure('tags') & expected_tags_structure
-      @taggings_structure_intersect = obtain_structure('taggings') & expected_taggings_structure
-
-      if (@tags_structure_intersect != expected_tags_structure ||
-          @taggings_structure_intersect != expected_taggings_structure)
-        msg = "A plugin is already using the \"tags\" or \"taggings\" tables, and\n"
-        msg << "the structure of the table does not contain the minimum column structure expected (extra columns allowed)\n"
-        msg << "by #{current_plugin.id}.\n" 
-        raise SchemaMismatchError, msg
-         
-      end
-
-      puts "Accepting 'tags' and 'taggings' tables with extra columns."
-
-    elsif (obtain_structure('tags') != expected_tags_structure) ||
-          (obtain_structure('taggings') != expected_taggings_structure)
-      msg = "A plugin is already using the \"tags\" or \"taggings\" tables, and\n"
-      msg << "the structure of the table does not strictly match the structure expected\n"
-      msg << "by #{current_plugin.id}.\n"
-      raise SchemaMismatchError, msg
+  def tables_already_exist?
+    %w(tags taggings).any? do |table|
+      ActiveRecord::Base.connection.table_exists? table
     end
   end
 
-
-  def obtain_structure(table_name)
-    ActiveRecord::Base.connection.columns(table_name).
-      reject { |c| %w(created_at updated_at id).include? c.name }.
-      map { |c| [c.name, c.type.to_s] }.
-      sort
+  def allow_extra_columns?
+    ENV['SCHEMA_CHECK_ALLOW_EXTRA_COLUMNS']
   end
 
-  def expected_tags_structure
-    [
-      ['name', 'string'],
-    ]
+  def assert_schema_match!
+    check = SchemaCheck.new(:allow_extra_columns => allow_extra_columns?)
+    fail failure_message unless check.pass?
   end
 
-  def expected_taggings_structure
-    [
-      ['tag_id', 'integer'],
-      ['taggable_id', 'integer'],
-      ['taggable_type', 'string'],
-      ['tagger_id', 'integer'],
-      ['tagger_type', 'string'],
-      ['context', 'string'],
-    ].sort
+  def failure_message
+    if allow_extra_columns?
+      msg = "A plugin is already using the \"tags\" or \"taggings\" tables, and\n"
+      msg << "the structure of the table does not contain the minimum column structure expected\n"
+      msg << "by #{current_plugin.id}.\n"
+    else
+      msg = "A plugin is already using the \"tags\" or \"taggings\" tables, and\n"
+      msg << "the structure of the table does not match the structure expected\n"
+      msg << "by #{current_plugin.id}.\n"
+    end
   end
 
   # A list of plugins which are using the acts_as_taggable_on tables (excluding
