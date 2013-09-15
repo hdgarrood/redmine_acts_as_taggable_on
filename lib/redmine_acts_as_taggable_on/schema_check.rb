@@ -1,5 +1,3 @@
-require 'redmine_acts_as_taggable_on/utils'
-
 class RedmineActsAsTaggableOn::SchemaCheck
   def initialize(opts={})
     @allow_extra_columns = opts[:allow_extra_columns]
