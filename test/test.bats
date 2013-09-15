@@ -139,3 +139,39 @@ end" > plugins/redmine_baz/db/migrate/001_add_tags.rb
   echo "$output"
   assert_contain "WARNING: The plugin redmine_bar is using 'acts-" "$output"
 }
+
+@test "disallows extra columns when migrating proper plugin up" {
+  mk_standard_plugin "baz"
+
+  mkdir -p plugins/redmine_baz/db/migrate
+  echo "class AddTagsAndTaggings < ActiveRecord::Migration
+  def up
+    create_table :tags do |t|
+      t.string  :name
+      t.integer :an_extra_column_which_we_should_disallow
+    end
+
+    create_table :taggings do |t|
+      t.integer :tag_id
+      t.integer :taggable_id
+      t.string  :taggable_type
+      t.integer :tagger_id
+      t.string  :tagger_type
+      t.string  :context
+    end
+  end
+
+  def down
+    drop_table :tags
+    drop_table :taggings
+  end
+end" > plugins/redmine_baz/db/migrate/001_add_tags_and_taggings.rb
+  rake redmine:plugins:migrate
+
+  mk_proper_plugin "bar"
+  run rake redmine:plugins:migrate
+
+  [ "$status" -ne 0 ]
+  echo "$output"
+  assert_contain "table does not match" "$output"
+}
