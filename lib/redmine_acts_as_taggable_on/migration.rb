@@ -65,23 +65,27 @@ class RedmineActsAsTaggableOn::Migration < ActsAsTaggableOnMigration
   end
 
   def allow_extra_columns?
-    ENV['SCHEMA_CHECK_ALLOW_EXTRA_COLUMNS']
+    ENV[allow_extra_columns_env_var_name]
+  end
+
+  def allow_extra_columns_env_var_name
+    'SCHEMA_CHECK_ALLOW_EXTRA_COLUMNS'
   end
 
   def check_schema!
-    check = SchemaCheck.new(:allow_extra_columns => allow_extra_columns?)
+    check = RedmineActsAsTaggableOn::SchemaCheck.new(
+      :allow_extra_columns => allow_extra_columns?)
     fail failure_message unless check.pass?
   end
 
   def failure_message
+    msg = "A plugin is already using the \"tags\" or \"taggings\" tables, and\n"
+    msg << "the structure of the table does not match the structure expected\n"
+    msg << "by #{current_plugin.id}.\n\n"
+
     if allow_extra_columns?
-      msg = "A plugin is already using the \"tags\" or \"taggings\" tables, and\n"
-      msg << "the structure of the table does not contain the minimum column structure expected\n"
-      msg << "by #{current_plugin.id}.\n"
-    else
-      msg = "A plugin is already using the \"tags\" or \"taggings\" tables, and\n"
-      msg << "the structure of the table does not match the structure expected\n"
-      msg << "by #{current_plugin.id}.\n"
+      msg << "You can allow extra columns by setting the environment variable\n"
+      msg << "#{allow_extra_columns_env_var_name}.\n\n"
     end
   end
 
