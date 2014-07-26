@@ -1,5 +1,7 @@
 # redmine_acts_as_taggable_on
 
+**notice: this project is currently unmaintained.**
+
 `redmine_acts_as_taggable_on` is a gem which allows multiple Redmine plugins to
 use the tables provided by `acts-as-taggable-on` without stepping on each
 others' toes.
@@ -31,7 +33,6 @@ print a gentle(-ish) suggestion to use this gem instead.
 ## Status and Compatibility
 
 `redmine_acts_as_taggable_on` should work with every 2.x release of Redmine.
-There are no known bugs (if you find one, I definitely want to know).
 
 To put your mind at ease: there is an automated test suite, which is run on
 [Travis CI](https://travis-ci.org/hdgarrood/redmine_acts_as_taggable_on), on
